@@ -1,0 +1,145 @@
+---
+title: "downsize"
+author: "Will Landau"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{downsize}
+  %\VignetteEngine{knitr::rmarkdown}
+  \usepackage[utf8]{inputenc}
+---
+
+With the `downsize` package, you can toggle the test and production versions of your workflow with the flip of a `TRUE/FALSE` global option. This is helpful when your workflow takes a long time to run, you want to test it quickly, and [unit testing](http://kbroman.org/pkg_primer/pages/tests.html) is too reductionist to cover everything.
+
+# Basic downsizing
+
+Say you want to analyze a large dataset.
+
+```{r, eval = F}
+big_data <- data.frame(x = rnorm(1e4), y = rnorm(1e4))
+```
+
+But for the sake of time, you want to test and debug your code on a smaller dataset. In your code, select your dataset with a call to `downsize()`.
+
+```{r, eval = F}
+my_data <- downsize(big_data) # downsize(big = big_data)
+```
+
+Above, `my_data` becomes `big_data` if `getOption("downsize")` is `FALSE` or `NULL` (default). If `getOption("downsize")` is `TRUE`, `big_data` becomes `head(big_data)`. You can toggle the global option `downsize` with calls to `scale_up()` and `scale_down()`, and you can override the option with `downsize(..., downsize = L)`, where `L` is `TRUE` or `FALSE`. Check if the workflow is scaled up or down with the `scaling()` function.
+
+# Example with test and production modes
+
+Here is an example script in test mode.
+
+```{r, eval = F}
+library(downsize)
+scale_down() # scales the workflow appropriately
+scaling() # shows if the workflow is scaled up or down
+big_data <- data.frame(x = rnorm(1e4), y = rnorm(1e4)) # always large
+my_data <- downsize(big_data) # either large or small
+nrow(my_data) # responds to scale_down() and scale_up()
+# ...more code, time-consuming if my_data is large...
+```
+
+To scale up the workflow to production mode, replace `scale_down()` with `scale_up()` and **leave everything else exactly the same**.
+
+```{r, eval = F}
+library(downsize)
+scale_up() # scales the workflow appropriately
+scaling() # shows if the workflow is scaled up or down
+big_data <- data.frame(x = rnorm(1e4), y = rnorm(1e4)) # always large
+my_data <- downsize(big_data) # either large or small
+nrow(my_data) # responds to scale_down() and scale_up()
+# ...more code, time-consuming if my_data is large...
+```
+
+Thus, tedium and human error are avoided, and the test is a close approximation to the original task at hand.
+
+# Provide your own test data
+
+You can provide a replacement for `big_data` using argument `small` in `downsize()`.
+
+```{r}
+library(downsize)
+big_data <- data.frame(x = rnorm(1e4), y = rnorm(1e4))
+small_data <- data.frame(x = runif(16), y = runif(16))
+scale_down()
+scaling() # getOption("downsize") is TRUE
+my_data <- downsize(big_data, small_data) # downsize(big = big_data, small = small_data)
+identical(my_data, small_data)
+```
+
+If you set `small` yourself, be sure that subsequent code can accept both `small` and `big`. For example, if `small` is a data frame and `big` is a matrix, your code may work fine in test mode and break in production mode. In addition, `downsize()` will warn you if `small` is identical to or bigger in memory than `big` (disable with `downsize(..., warn = FALSE`)). To be safer, use the subsetting capabilities of the `downsize()` function.
+
+# Subsetting
+
+The command `my_data <- downsize(big = big_data)` is equivalent to `my_data <- downsize(big = big_data, nrow = 6)`. There are multiple ways to subset argument `big` in `downsize()` when it is time to scale down. As in the following examples, be sure that `small` is set to `NULL` (default).
+
+```{r}
+scale_down()
+downsize(1:10, length = 2)
+m <- matrix(1:36, ncol = 6)
+downsize(m, ncol = 2)
+downsize(m, nrow = 2)
+downsize(m, dim = c(2, 2))
+downsize(data.frame(x = 1:10, y = 1:10), nrow = 5)
+x = array(0, dim = c(10, 100, 2, 300, 12))
+dim(x)
+my_array <- downsize(x, dim = rep(3, 5))
+dim(my_array)
+my_array <- downsize(x, dim = c(1, 4))
+dim(my_array)
+my_array <- downsize(x, ncol = 1)
+dim(my_array)
+```
+
+Set `random` to `TRUE` to take a random subset of your data rather than just the first few rows or columns.
+
+```{r}
+set.seed(6)
+downsize(m, ncol = 2, random = T)
+```
+
+# Interchange code blocks
+
+You can interchange entire blocks of code based on the scaling of the workload.
+
+```{r}
+scale_down()
+downsize(big = {a = 1; a + 10}, small = {a = 1; a + 1})
+scale_up()
+downsize(big = {a = 1; a + 10}, small = {a = 1; a + 1})
+```
+
+Variables set in code blocks are available after calls to `downsize()`.
+
+```{r}
+scale_down()
+tmp <- downsize(
+  big = {
+    x = "long code"
+    y = 1000
+  }, 
+  small = {
+    x = "short code"
+    y = 3.14
+  })
+x == "short code" & y == 3.14
+scale_up()
+tmp <- downsize(
+  big = {
+    x = "long code"
+    y = 1000
+  }, 
+  small = {
+    x = "short code"
+    y = 3.14
+  })
+x == "long code" & y == 1000
+```
+
+The `downsize()` function checks the values of `big` and `small`, so any  code blocks passed as arguments must return non-`NULL` values. To avoid warnings, the return value of `small` should be different from and no larger in memory than that of `big` (or just call `downsize(..., warn = FALSE)`). If subsetter arguments such as `dim` and `length` are used, they apply to the return value of `big` rather than any variables defined in the code block.
+
+# Troubleshooting
+
+Please refer to [TROUBLESHOOTING.md](https://github.com/wlandau/downsize/blob/master/TROUBLESHOOTING.md) on the [GitHub page](https://github.com/wlandau/downsize) for instructions.
