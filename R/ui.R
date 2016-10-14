@@ -1,45 +1,15 @@
-#' @title Function \code{scale_down}
-#' @description Calls \code{options(downsize = TRUE)} to scale down a workflow.
-#' This affects the \code{\link{downsize}} function.
-#' @seealso \code{\link{downsize}}, \code{\link{downsize}}, \code{\link{scale_up}},
-#' \code{\link{scaling}}
-#' @export
-scale_down = function(){
-  options(downsize = TRUE)	
-}
-
-#' @title Function \code{scale_up}
-#' @description Call \code{options(downsize = FALSE)} to scale up a workflow.
-#' This affects the \code{\link{downsize}} function.
-#' @seealso \code{\link{downsize}}, \code{\link{scale_down}}, 
-#' \code{\link{scaling}}
-#' @export
-scale_up = function(){
-  options(downsize = FALSE)	
-}
-
-#' @title Function \code{scaling}
-#' @description Check whether the current workflow is scaled up or down.
-#' @seealso \code{\link{downsize}}, \code{\link{scale_down}}, 
-#' \code{\link{scale_up}}
-#' @export
-#' @return \code{"scaled down"} if \code{getOption("downsize")} is \code{TRUE} 
-#' and "scaled up" if \code{getOption("downsize")} is \code{FALSE} or \code{NULL}.
-scaling = function(){
-  downsize = getOption("downsize")
-  if(is.null(downsize)) downsize = FALSE	
-  ifelse(downsize, "scaled down", "scaled up")
-}
-
 #' @title Function \code{downsize}. Main function of the \code{downsize} package.
 #' @description Replace \code{big} with a downsized object 
 #' if the \code{downsize} argument (or global \code{downsize} option) is \code{TRUE}.
-#' @details If the \code{downsize} argument is \code{TRUE}, a downsized replacement 
+#' Use the \code{\link{help_downsize}} function to get more help.
+#' @details Use the \code{\link{help_downsize}} function to get more help.
+#' If the \code{downsize} argument is \code{TRUE}, a downsized replacement 
 #' for \code{big} will be returned. In this case, arguments \code{dim}, \code{length},
 #'  etc. take precedence over \code{small}. If the \code{downsize} argument is not set 
 #' manually, the global option \code{downsize} will be used. The \code{downsize} option 
-#' can be toggled with functions \code{\link{scale_down}} and \code{\link{scale_up}}.
-#' @seealso \code{\link{scale_down}}, \code{\link{scale_up}}, \code{\link{scaling}}
+#' can be toggled with functions \code{\link{test_mode}} and \code{\link{production_mode}}.
+#' @seealso \code{\link{help_downsize}}, \code{\link{test_mode}}, 
+#' \code{\link{production_mode}}, \code{\link{my_mode}}
 #' @export
 #' @return A downsized object if \code{downsize} is \code{TRUE} and \code{big} otherwise.
 #' @param big Object to return if \code{downsize} is \code{FALSE} or \code{NULL}.
@@ -48,8 +18,8 @@ scaling = function(){
 #' @param downsize \code{TRUE}/\code{FALSE} value (\code{NULL} counts as \code{FALSE}), 
 #' whether to replace \code{big} with a downsized object.
 #' Defaults to the global option \code{downsize}, which you can check with
-#' \code{getOption("downsize")} or the \code{\link{scaling}} function and set with functions
-#' \code{\link{downsize}}, \code{\link{scale_down}} or \code{\link{scale_up}}.
+#' \code{getOption("downsize")} or the \code{\link{my_mode}} function and set with functions
+#' \code{\link{downsize}}, \code{\link{test_mode}} or \code{\link{production_mode}}.
 #' @param random If \code{TRUE}, take a random subset of \code{big} instead
 #' of the first few elements. For example, if \code{nrow == 3}, take a random 
 #' 3 rows instead of the first 3.
@@ -66,4 +36,43 @@ downsize = function(big, small = NULL, downsize = getOption("downsize"), warn = 
   small = make_small(args)
   if(warn) check_downsized(big, small)
   small
+}
+
+#' @title Function \code{my_mode}
+#' @description Check whether the current workflow is production mode or down.
+#' Use the \code{\link{help_downsize}} function to get more help.
+#' @details Use the \code{\link{help_downsize}} function to get more help.
+#' @seealso \code{\link{help_downsize}}, \code{\link{downsize}}, 
+#' \code{\link{test_mode}}, \code{\link{production_mode}}
+#' @export
+#' @return \code{"test mode"} if \code{getOption("downsize")} is \code{TRUE} 
+#' and "production mode" if \code{getOption("downsize")} is \code{FALSE} or \code{NULL}.
+my_mode = function(){
+  downsize = getOption("downsize")
+  if(is.null(downsize)) downsize = FALSE	
+  ifelse(downsize, "test mode", "production mode")
+}
+
+#' @title Function \code{production_mode}
+#' @description Call \code{options(downsize = FALSE)} to scale up a workflow.
+#' This affects the \code{\link{downsize}} function.
+#' Use the \code{\link{help_downsize}} function to get more help.
+#' @details Use the \code{\link{help_downsize}} function to get more help.
+#' @seealso \code{\link{help_downsize}}, \code{\link{downsize}}, 
+#' \code{\link{test_mode}}, \code{\link{my_mode}}
+#' @export
+production_mode = function(){
+  options(downsize = FALSE)	
+}
+
+#' @title Function \code{test_mode}
+#' @description Calls \code{options(downsize = TRUE)} to scale down a workflow.
+#' This affects the \code{\link{downsize}} function.
+#' Use the \code{\link{help_downsize}} function to get more help.
+#' @details Use the \code{\link{help_downsize}} function to get more help.
+#' @seealso \code{\link{help_downsize}}, \code{\link{downsize}}, \code{\link{production_mode}}, \code{\link{my_mode}},
+#' \code{\link{my_mode}}
+#' @export
+test_mode = function(){
+  options(downsize = TRUE)	
 }

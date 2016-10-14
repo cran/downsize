@@ -12,7 +12,7 @@
 
 <meta name="author" content="Will Landau" />
 
-<meta name="date" content="2016-09-21" />
+<meta name="date" content="2016-10-13" />
 
 <title>downsize</title>
 
@@ -70,38 +70,38 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 
 <h1 class="title toc-ignore">downsize</h1>
 <h4 class="author"><em>Will Landau</em></h4>
-<h4 class="date"><em>2016-09-21</em></h4>
+<h4 class="date"><em>2016-10-13</em></h4>
 
 
 
-<p>With the <code>downsize</code> package, you can toggle the test and production versions of your workflow with the flip of a <code>TRUE/FALSE</code> global option. This is helpful when your workflow takes a long time to run, you want to test it quickly, and <a href="http://kbroman.org/pkg_primer/pages/tests.html">unit testing</a> is too reductionist to cover everything.</p>
+<p>With the <code>downsize</code> package, you can toggle the test and production versions of your workflow with the flip of a <code>TRUE/FALSE</code> global option. This is helpful when your workflow takes a long time to run, you want to test it quickly, and <a href="https://www.r-bloggers.com/unit-testing-with-r/">unit testing</a> is too reductionist to cover everything.</p>
 <div id="basic-downsizing" class="section level1">
 <h1>Basic downsizing</h1>
 <p>Say you want to analyze a large dataset.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">big_data &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">x =</span> <span class="kw">rnorm</span>(<span class="fl">1e4</span>), <span class="dt">y =</span> <span class="kw">rnorm</span>(<span class="fl">1e4</span>))</code></pre></div>
 <p>But for the sake of time, you want to test and debug your code on a smaller dataset. In your code, select your dataset with a call to <code>downsize()</code>.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">my_data &lt;-<span class="st"> </span><span class="kw">downsize</span>(big_data) <span class="co"># downsize(big = big_data)</span></code></pre></div>
-<p>Above, <code>my_data</code> becomes <code>big_data</code> if <code>getOption(&quot;downsize&quot;)</code> is <code>FALSE</code> or <code>NULL</code> (default). If <code>getOption(&quot;downsize&quot;)</code> is <code>TRUE</code>, <code>big_data</code> becomes <code>head(big_data)</code>. You can toggle the global option <code>downsize</code> with calls to <code>scale_up()</code> and <code>scale_down()</code>, and you can override the option with <code>downsize(..., downsize = L)</code>, where <code>L</code> is <code>TRUE</code> or <code>FALSE</code>. Check if the workflow is scaled up or down with the <code>scaling()</code> function.</p>
+<p>Above, <code>my_data</code> becomes <code>big_data</code> if <code>getOption(&quot;downsize&quot;)</code> is <code>FALSE</code> or <code>NULL</code> (default). If <code>getOption(&quot;downsize&quot;)</code> is <code>TRUE</code>, <code>big_data</code> becomes <code>head(big_data)</code>. You can toggle the global option <code>downsize</code> with calls to <code>production_mode()</code> and <code>test_mode()</code>, and you can override the option with <code>downsize(..., downsize = L)</code>, where <code>L</code> is <code>TRUE</code> or <code>FALSE</code>. Check if the workflow is in test or production mode with the <code>my_mode()</code> function.</p>
 </div>
 <div id="example-with-test-and-production-modes" class="section level1">
 <h1>Example with test and production modes</h1>
 <p>Here is an example script in test mode.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(downsize)
-<span class="kw">scale_down</span>() <span class="co"># scales the workflow appropriately</span>
-<span class="kw">scaling</span>() <span class="co"># shows if the workflow is scaled up or down</span>
+<span class="kw">test_mode</span>() <span class="co"># scales the workflow appropriately</span>
+<span class="kw">my_mode</span>() <span class="co"># shows if the workflow is in test or production mode</span>
 big_data &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">x =</span> <span class="kw">rnorm</span>(<span class="fl">1e4</span>), <span class="dt">y =</span> <span class="kw">rnorm</span>(<span class="fl">1e4</span>)) <span class="co"># always large</span>
 my_data &lt;-<span class="st"> </span><span class="kw">downsize</span>(big_data) <span class="co"># either large or small</span>
-<span class="kw">nrow</span>(my_data) <span class="co"># responds to scale_down() and scale_up()</span>
+<span class="kw">nrow</span>(my_data) <span class="co"># responds to test_mode() and production_mode()</span>
 <span class="co"># ...more code, time-consuming if my_data is large...</span></code></pre></div>
-<p>To scale up the workflow to production mode, replace <code>scale_down()</code> with <code>scale_up()</code> and <strong>leave everything else exactly the same</strong>.</p>
+<p>To scale up the workflow up to production mode, replace <code>test_mode()</code> with <code>production_mode()</code> and <strong>leave everything else exactly the same</strong>.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(downsize)
-<span class="kw">scale_up</span>() <span class="co"># scales the workflow appropriately</span>
-<span class="kw">scaling</span>() <span class="co"># shows if the workflow is scaled up or down</span>
+<span class="kw">production_mode</span>() <span class="co"># scales the workflow appropriately</span>
+<span class="kw">my_mode</span>() <span class="co"># shows if the workflow is in test or production mode</span>
 big_data &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">x =</span> <span class="kw">rnorm</span>(<span class="fl">1e4</span>), <span class="dt">y =</span> <span class="kw">rnorm</span>(<span class="fl">1e4</span>)) <span class="co"># always large</span>
 my_data &lt;-<span class="st"> </span><span class="kw">downsize</span>(big_data) <span class="co"># either large or small</span>
-<span class="kw">nrow</span>(my_data) <span class="co"># responds to scale_down() and scale_up()</span>
+<span class="kw">nrow</span>(my_data) <span class="co"># responds to test_mode() and production_mode()</span>
 <span class="co"># ...more code, time-consuming if my_data is large...</span></code></pre></div>
-<p>Thus, tedium and human error are avoided, and the test is a close approximation to the original task at hand.</p>
+<p>An ideal workflow has multiple calls to <code>downsize()</code> that are configured all at once with a single call to <code>test_mode()</code> or <code>production_mode()</code> at the very beginning. Thus, tedium and human error are avoided, and the test is a close approximation to the original task at hand.</p>
 </div>
 <div id="provide-your-own-test-data" class="section level1">
 <h1>Provide your own test data</h1>
@@ -109,9 +109,9 @@ my_data &lt;-<span class="st"> </span><span class="kw">downsize</span>(big_data)
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(downsize)
 big_data &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">x =</span> <span class="kw">rnorm</span>(<span class="fl">1e4</span>), <span class="dt">y =</span> <span class="kw">rnorm</span>(<span class="fl">1e4</span>))
 small_data &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">x =</span> <span class="kw">runif</span>(<span class="dv">16</span>), <span class="dt">y =</span> <span class="kw">runif</span>(<span class="dv">16</span>))
-<span class="kw">scale_down</span>()
-<span class="kw">scaling</span>() <span class="co"># getOption(&quot;downsize&quot;) is TRUE</span></code></pre></div>
-<pre><code>## [1] &quot;scaled down&quot;</code></pre>
+<span class="kw">test_mode</span>()
+<span class="kw">my_mode</span>() <span class="co"># getOption(&quot;downsize&quot;) is TRUE</span></code></pre></div>
+<pre><code>## [1] &quot;test mode&quot;</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">my_data &lt;-<span class="st"> </span><span class="kw">downsize</span>(big_data, small_data) <span class="co"># downsize(big = big_data, small = small_data)</span>
 <span class="kw">identical</span>(my_data, small_data)</code></pre></div>
 <pre><code>## [1] TRUE</code></pre>
@@ -119,8 +119,8 @@ small_data &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<spa
 </div>
 <div id="subsetting" class="section level1">
 <h1>Subsetting</h1>
-<p>The command <code>my_data &lt;- downsize(big = big_data)</code> is equivalent to <code>my_data &lt;- downsize(big = big_data, nrow = 6)</code>. There are multiple ways to subset argument <code>big</code> in <code>downsize()</code> when it is time to scale down. As in the following examples, be sure that <code>small</code> is set to <code>NULL</code> (default).</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">scale_down</span>()
+<p>The command <code>my_data &lt;- downsize(big = big_data)</code> is equivalent to <code>my_data &lt;- downsize(big = big_data, nrow = 6)</code>. There are multiple ways to subset argument <code>big</code> in <code>downsize()</code> when it is time to scale down to test mode. As in the following examples, be sure that <code>small</code> is set to <code>NULL</code> (default).</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">test_mode</span>()
 <span class="kw">downsize</span>(<span class="dv">1</span>:<span class="dv">10</span>, <span class="dt">length =</span> <span class="dv">2</span>)</code></pre></div>
 <pre><code>## [1] 1 2</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">m &lt;-<span class="st"> </span><span class="kw">matrix</span>(<span class="dv">1</span>:<span class="dv">36</span>, <span class="dt">ncol =</span> <span class="dv">6</span>)
@@ -172,15 +172,15 @@ small_data &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<spa
 </div>
 <div id="interchange-code-blocks" class="section level1">
 <h1>Interchange code blocks</h1>
-<p>You can interchange entire blocks of code based on the scaling of the workload.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">scale_down</span>()
+<p>You can interchange entire blocks of code based on the scaling/mode of the workload.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">test_mode</span>()
 <span class="kw">downsize</span>(<span class="dt">big =</span> {a =<span class="st"> </span><span class="dv">1</span>; a +<span class="st"> </span><span class="dv">10</span>}, <span class="dt">small =</span> {a =<span class="st"> </span><span class="dv">1</span>; a +<span class="st"> </span><span class="dv">1</span>})</code></pre></div>
 <pre><code>## [1] 2</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">scale_up</span>()
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">production_mode</span>()
 <span class="kw">downsize</span>(<span class="dt">big =</span> {a =<span class="st"> </span><span class="dv">1</span>; a +<span class="st"> </span><span class="dv">10</span>}, <span class="dt">small =</span> {a =<span class="st"> </span><span class="dv">1</span>; a +<span class="st"> </span><span class="dv">1</span>})</code></pre></div>
 <pre><code>## [1] 11</code></pre>
 <p>Variables set in code blocks are available after calls to <code>downsize()</code>.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">scale_down</span>()
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">test_mode</span>()
 tmp &lt;-<span class="st"> </span><span class="kw">downsize</span>(
   <span class="dt">big =</span> {
     x =<span class="st"> &quot;long code&quot;</span>
@@ -192,7 +192,7 @@ tmp &lt;-<span class="st"> </span><span class="kw">downsize</span>(
   })
 x ==<span class="st"> &quot;short code&quot;</span> &amp;<span class="st"> </span>y ==<span class="st"> </span><span class="fl">3.14</span></code></pre></div>
 <pre><code>## [1] TRUE</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">scale_up</span>()
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">production_mode</span>()
 tmp &lt;-<span class="st"> </span><span class="kw">downsize</span>(
   <span class="dt">big =</span> {
     x =<span class="st"> &quot;long code&quot;</span>
@@ -206,9 +206,9 @@ x ==<span class="st"> &quot;long code&quot;</span> &amp;<span class="st"> </span
 <pre><code>## [1] TRUE</code></pre>
 <p>The <code>downsize()</code> function checks the values of <code>big</code> and <code>small</code>, so any code blocks passed as arguments must return non-<code>NULL</code> values. To avoid warnings, the return value of <code>small</code> should be different from and no larger in memory than that of <code>big</code> (or just call <code>downsize(..., warn = FALSE)</code>). If subsetter arguments such as <code>dim</code> and <code>length</code> are used, they apply to the return value of <code>big</code> rather than any variables defined in the code block.</p>
 </div>
-<div id="troubleshooting" class="section level1">
-<h1>Troubleshooting</h1>
-<p>Please refer to <a href="https://github.com/wlandau/downsize/blob/master/TROUBLESHOOTING.md">TROUBLESHOOTING.md</a> on the <a href="https://github.com/wlandau/downsize">GitHub page</a> for instructions.</p>
+<div id="help-and-troubleshooting" class="section level1">
+<h1>Help and troubleshooting</h1>
+<p>Use the <code>help_downsize()</code> function to obtain a collection of helpful links. For troubleshooting, please refer to <a href="https://github.com/wlandau/downsize/blob/master/TROUBLESHOOTING.md">TROUBLESHOOTING.md</a> on the <a href="https://github.com/wlandau/downsize">GitHub page</a> for instructions.</p>
 </div>
 
 

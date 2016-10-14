@@ -6,33 +6,33 @@
 
 ## ---- eval = F-----------------------------------------------------------
 #  library(downsize)
-#  scale_down() # scales the workflow appropriately
-#  scaling() # shows if the workflow is scaled up or down
+#  test_mode() # scales the workflow appropriately
+#  my_mode() # shows if the workflow is in test or production mode
 #  big_data <- data.frame(x = rnorm(1e4), y = rnorm(1e4)) # always large
 #  my_data <- downsize(big_data) # either large or small
-#  nrow(my_data) # responds to scale_down() and scale_up()
+#  nrow(my_data) # responds to test_mode() and production_mode()
 #  # ...more code, time-consuming if my_data is large...
 
 ## ---- eval = F-----------------------------------------------------------
 #  library(downsize)
-#  scale_up() # scales the workflow appropriately
-#  scaling() # shows if the workflow is scaled up or down
+#  production_mode() # scales the workflow appropriately
+#  my_mode() # shows if the workflow is in test or production mode
 #  big_data <- data.frame(x = rnorm(1e4), y = rnorm(1e4)) # always large
 #  my_data <- downsize(big_data) # either large or small
-#  nrow(my_data) # responds to scale_down() and scale_up()
+#  nrow(my_data) # responds to test_mode() and production_mode()
 #  # ...more code, time-consuming if my_data is large...
 
 ## ------------------------------------------------------------------------
 library(downsize)
 big_data <- data.frame(x = rnorm(1e4), y = rnorm(1e4))
 small_data <- data.frame(x = runif(16), y = runif(16))
-scale_down()
-scaling() # getOption("downsize") is TRUE
+test_mode()
+my_mode() # getOption("downsize") is TRUE
 my_data <- downsize(big_data, small_data) # downsize(big = big_data, small = small_data)
 identical(my_data, small_data)
 
 ## ------------------------------------------------------------------------
-scale_down()
+test_mode()
 downsize(1:10, length = 2)
 m <- matrix(1:36, ncol = 6)
 downsize(m, ncol = 2)
@@ -53,13 +53,13 @@ set.seed(6)
 downsize(m, ncol = 2, random = T)
 
 ## ------------------------------------------------------------------------
-scale_down()
+test_mode()
 downsize(big = {a = 1; a + 10}, small = {a = 1; a + 1})
-scale_up()
+production_mode()
 downsize(big = {a = 1; a + 10}, small = {a = 1; a + 1})
 
 ## ------------------------------------------------------------------------
-scale_down()
+test_mode()
 tmp <- downsize(
   big = {
     x = "long code"
@@ -70,7 +70,7 @@ tmp <- downsize(
     y = 3.14
   })
 x == "short code" & y == 3.14
-scale_up()
+production_mode()
 tmp <- downsize(
   big = {
     x = "long code"
