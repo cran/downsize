@@ -1,7 +1,7 @@
 Package: downsize
 Title: A Tool to Downsize Large Workflows for Testing
-Version: 0.2.0
-Date: 2016-10-13
+Version: 0.2.1
+Date: 2016-10-17
 Authors@R: person(family = "Landau", given = "William", 
     email = "will.landau@gmail.com", role = c("aut", "cre"))
 Description: Toggles the test and production versions of a large workflow.
@@ -14,8 +14,8 @@ URL: https://github.com/wlandau/downsize
 BugReports: https://github.com/wlandau/downsize/issues
 RoxygenNote: 5.0.1
 NeedsCompilation: no
-Packaged: 2016-10-14 02:57:45 UTC; landau
+Packaged: 2016-10-17 04:46:44 UTC; landau
 Author: William Landau [aut, cre]
 Maintainer: William Landau <will.landau@gmail.com>
 Repository: CRAN
-Date/Publication: 2016-10-14 08:16:10
+Date/Publication: 2016-10-17 11:09:26

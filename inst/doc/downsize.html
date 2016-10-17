@@ -12,7 +12,7 @@
 
 <meta name="author" content="Will Landau" />
 
-<meta name="date" content="2016-10-13" />
+<meta name="date" content="2016-10-17" />
 
 <title>downsize</title>
 
@@ -70,7 +70,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 
 <h1 class="title toc-ignore">downsize</h1>
 <h4 class="author"><em>Will Landau</em></h4>
-<h4 class="date"><em>2016-10-13</em></h4>
+<h4 class="date"><em>2016-10-17</em></h4>
 
 
 
@@ -119,7 +119,7 @@ small_data &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<spa
 </div>
 <div id="subsetting" class="section level1">
 <h1>Subsetting</h1>
-<p>The command <code>my_data &lt;- downsize(big = big_data)</code> is equivalent to <code>my_data &lt;- downsize(big = big_data, nrow = 6)</code>. There are multiple ways to subset argument <code>big</code> in <code>downsize()</code> when it is time to scale down to test mode. As in the following examples, be sure that <code>small</code> is set to <code>NULL</code> (default).</p>
+<p>The command <code>my_data &lt;- downsize(big = big_data)</code> is equivalent to <code>my_data &lt;- downsize(big = big_data, nrow = 6)</code>. There are multiple ways to subset argument <code>big</code> in <code>downsize()</code> when it is time to scale down to test mode. As in the following examples, be sure that <code>small</code> is set to <code>NULL</code> (default). Otherwise, subsetter arguments such as <code>dim</code>, <code>length</code>, <code>nrow</code>, and <code>ncol</code> will be ignored.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">test_mode</span>()
 <span class="kw">downsize</span>(<span class="dv">1</span>:<span class="dv">10</span>, <span class="dt">length =</span> <span class="dv">2</span>)</code></pre></div>
 <pre><code>## [1] 1 2</code></pre>
@@ -204,7 +204,6 @@ tmp &lt;-<span class="st"> </span><span class="kw">downsize</span>(
   })
 x ==<span class="st"> &quot;long code&quot;</span> &amp;<span class="st"> </span>y ==<span class="st"> </span><span class="dv">1000</span></code></pre></div>
 <pre><code>## [1] TRUE</code></pre>
-<p>The <code>downsize()</code> function checks the values of <code>big</code> and <code>small</code>, so any code blocks passed as arguments must return non-<code>NULL</code> values. To avoid warnings, the return value of <code>small</code> should be different from and no larger in memory than that of <code>big</code> (or just call <code>downsize(..., warn = FALSE)</code>). If subsetter arguments such as <code>dim</code> and <code>length</code> are used, they apply to the return value of <code>big</code> rather than any variables defined in the code block.</p>
 </div>
 <div id="help-and-troubleshooting" class="section level1">
 <h1>Help and troubleshooting</h1>
