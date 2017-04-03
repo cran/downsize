@@ -1,15 +1,15 @@
-0e6227e877a830d0ac6e9ac593058b57 *DESCRIPTION
-5ad3e2c831f391b87737c9ed9539b3e3 *NAMESPACE
+beed16ce6d2d46a095349c8a2b1a161e *DESCRIPTION
+daa5d6fcf7d411cdd5d3a6ddbb1bfb57 *NAMESPACE
 f5737759db88a819b5cf28591170cd3a *R/deprecated.R
 acb73d5586120aa67072c01133ec11f8 *R/help.R
-a0d619955d6f9ff7a56eba5a2e568e7f *R/namespace.R
+cffa93698bc69796f89d8efc8ca552ed *R/namespace.R
 efb33e4a321f4168cc93527bba62232d *R/subset.R
 9b6d9223b3e9ed79a4565c0e2df58e8e *R/ui.R
 7b19cf777e2424e1d983999945023561 *R/utils.R
-64d8c6a3c4a2f78d53a2f3fc52bdc56b *build/vignette.rds
+4b5f354dc9a796b700ee03d01dd90512 *build/vignette.rds
 46bb7e723279efb8ee0e4d518b60ada8 *inst/doc/downsize.R
-f9412c8aa633fdcba600cac3d730532c *inst/doc/downsize.Rmd
-3d58656c90d765ba2f4397ea98e4f15a *inst/doc/downsize.html
+4949fd6aa4d8983f9c5047c0e783c47b *inst/doc/downsize.Rmd
+21b9b42ab46aaf75ff85a40f80a1aade *inst/doc/downsize.html
 fbf4e28923a76cd2cd544280c3261491 *man/arg_small.Rd
 161c2f63a639ecc125fd114b2e5b468c *man/check_args.Rd
 6821800a48a11f94972c7b0aa043e76f *man/downsize.Rd
@@ -34,7 +34,7 @@ e16d7b72ffadfeb44535e9a9013f357b *tests/testthat.R
 9c6acd73cdc037d08fdce7a572347cfa *tests/testthat/test-arg_small.R
 45e80364e25b900ca66d6f1308ea79c7 *tests/testthat/test-check_args.R
 f7c2ae93694cb9250548dbb4cc48d479 *tests/testthat/test-deprecated.R
-175742650d43301f44a1c0cdf5422f55 *tests/testthat/test-downsize.R
+79703b5c7145983ab93d269542d7dbb5 *tests/testthat/test-downsize.R
 ccc9e833085df2d3514d4a3f142a21ef *tests/testthat/test-ds.R
 334b4fe18b9e8df2be558814d4db74e9 *tests/testthat/test-help_downsize.R
 df367419514090d65b1146cb6c7f984f *tests/testthat/test-make_small.R
@@ -47,4 +47,4 @@ e16c7f7d017db0723bf6a82d0ec2d2fb *tests/testthat/test-subset_ncol.R
 38cc28ee43178ab81a11d04f69a2dab8 *tests/testthat/test-subset_nrow.R
 0c908471f5124afe30d913b9825ac491 *tests/testthat/test-subset_single_dim.R
 023f8aaa4fa626a2989f2ab584569ac9 *tests/testthat/test-use_arg_small.R
-f9412c8aa633fdcba600cac3d730532c *vignettes/downsize.Rmd
+4949fd6aa4d8983f9c5047c0e783c47b *vignettes/downsize.Rmd
