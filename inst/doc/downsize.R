@@ -1,10 +1,10 @@
-## ---- eval = F-----------------------------------------------------------
+## ---- eval = F----------------------------------------------------------------
 #  big_data <- data.frame(x = rnorm(1e4), y = rnorm(1e4))
 
-## ---- eval = F-----------------------------------------------------------
+## ---- eval = F----------------------------------------------------------------
 #  my_data <- downsize(big_data) # downsize(big = big_data)
 
-## ---- eval = F-----------------------------------------------------------
+## ---- eval = F----------------------------------------------------------------
 #  library(downsize)
 #  test_mode() # scales the workflow appropriately
 #  my_mode() # shows if the workflow is in test or production mode
@@ -13,7 +13,7 @@
 #  nrow(my_data) # responds to test_mode() and production_mode()
 #  # ...more code, time-consuming if my_data is large...
 
-## ---- eval = F-----------------------------------------------------------
+## ---- eval = F----------------------------------------------------------------
 #  library(downsize)
 #  production_mode() # scales the workflow appropriately
 #  my_mode() # shows if the workflow is in test or production mode
@@ -22,7 +22,7 @@
 #  nrow(my_data) # responds to test_mode() and production_mode()
 #  # ...more code, time-consuming if my_data is large...
 
-## ------------------------------------------------------------------------
+## -----------------------------------------------------------------------------
 library(downsize)
 big_data <- data.frame(x = rnorm(1e4), y = rnorm(1e4))
 small_data <- data.frame(x = runif(16), y = runif(16))
@@ -31,7 +31,7 @@ my_mode() # getOption("downsize") is TRUE
 my_data <- downsize(big_data, small_data) # downsize(big = big_data, small = small_data)
 identical(my_data, small_data)
 
-## ------------------------------------------------------------------------
+## -----------------------------------------------------------------------------
 test_mode()
 downsize(1:10, length = 2)
 m <- matrix(1:36, ncol = 6)
@@ -48,17 +48,17 @@ dim(my_array)
 my_array <- downsize(x, ncol = 1)
 dim(my_array)
 
-## ------------------------------------------------------------------------
+## -----------------------------------------------------------------------------
 set.seed(6)
 downsize(m, ncol = 2, random = T)
 
-## ------------------------------------------------------------------------
+## -----------------------------------------------------------------------------
 test_mode()
 downsize(big = {a = 1; a + 10}, small = {a = 1; a + 1})
 production_mode()
 downsize(big = {a = 1; a + 10}, small = {a = 1; a + 1})
 
-## ------------------------------------------------------------------------
+## -----------------------------------------------------------------------------
 test_mode()
 tmp <- downsize(
   big = {
